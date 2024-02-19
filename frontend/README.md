@@ -10,6 +10,12 @@ This project was bootstrapped with [Vite](https://vitejs.dev/) and has the follo
   - Data visualization library
   - Find out here at [https://d3js.org/getting-started#d3-in-react](https://d3js.org/getting-started#d3-in-react)
 
+## Setting Up Locally
+
+1. Install LTS version of Node (recommended version in `.nvmrc`)
+2. CD into this directory and install via `npm install`
+3. Start the dev server with `npm run dev`
+
 ## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
