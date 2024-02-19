@@ -8,6 +8,7 @@ This project was bootstrapped with [Vite](https://vitejs.dev/) and has the follo
   - Provides easier styling of components
 - [D3](https://d3js.org/)
   - Data visualization library
+  - Find out here at [https://d3js.org/getting-started#d3-in-react](https://d3js.org/getting-started#d3-in-react)
 
 ## React + TypeScript + Vite
 
