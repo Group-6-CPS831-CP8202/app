@@ -1,6 +1,7 @@
 {
-    "conventionalCommits.scopes": [
-        "frontend",
-        "backend"
-    ]
+	"conventionalCommits.scopes": ["frontend", "backend"],
+	"cSpell.words": ["tanstack"],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
 }

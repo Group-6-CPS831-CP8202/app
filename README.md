@@ -29,6 +29,17 @@ Members:
 
 While the install scripts should install all the correct dependencies there are some edge cases.
 
+### Installing Dependencies
+
+#### Frontend
+
+- Make sure you're in the `frontend/` directory before using `npm install`, or it will attempt to install the modules in the root directory
+
+#### Backend
+
+- After installing a new dependency, `cd` into the `backend/` directory and run `pip freeze > requirements.txt` to update the requirements
+  - Make sure you've activated your virtual environment first via `/backend/venv/bin/activate` (`activate.bat` on Windows)
+
 ### BiomesJS
 
 We're using [Biomejs](https://biomejs.dev/) for automatic code formatting and linting. Opening the Repo in VSCode should prompt you to install the recommended extensions.
