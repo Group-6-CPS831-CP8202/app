@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
 	Link,
 	Outlet,
@@ -23,37 +22,39 @@ function RootComponent() {
 			<div className="p-2 flex gap-2 text-lg">
 				<Link
 					to="/"
-					activeProps={{
-						className: "font-bold",
-					}}
+					activeProps={{ className: "font-bold" }}
 					activeOptions={{ exact: true }}
 				>
 					Home
-				</Link>{" "}
+				</Link>
 				{auth.isAuthenticated ? (
-					<Link
-						to={"/dashboard"}
-						activeProps={{
-							className: "font-bold",
-						}}
-					>
-						Dashboard
-					</Link>
+					<>
+						<Link to={"/dashboard"} activeProps={{ className: "font-bold" }}>
+							Dashboard
+						</Link>
+					</>
 				) : (
-					<Link
-						to={"/login"}
-						activeProps={{
-							className: "font-bold",
-						}}
-						search={{ redirect: "/" }}
-					>
-						Login
-					</Link>
+					<>
+						<Link
+							to={"/login"}
+							activeProps={{ className: "font-bold" }}
+							search={{ redirect: "/" }}
+						>
+							Login
+						</Link>
+						<Link
+							to={"/register"}
+							activeProps={{ className: "font-bold" }}
+							search={{ redirect: "/" }}
+						>
+							Register
+						</Link>
+					</>
 				)}
 			</div>
 			<hr />
 			<Outlet />
-			<TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
+			<TanStackRouterDevtools position="bottom-left" initialIsOpen={false} />
 		</>
 	);
 }

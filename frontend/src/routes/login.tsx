@@ -27,8 +27,8 @@ function LoginComponent() {
 
 	const search = routeApi.useSearch();
 
-	const handleLogin = (evt: React.FormEvent<HTMLFormElement>) => {
-		evt.preventDefault();
+	const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		setIsSubmitting(true);
 
 		flushSync(() => {
