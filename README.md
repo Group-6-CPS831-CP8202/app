@@ -29,7 +29,7 @@ Members:
 
 While the install scripts should install all the correct dependencies there are some edge cases.
 
-### Installing Dependencies
+### Adding New Dependencies
 
 #### Frontend
 
