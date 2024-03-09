@@ -1,7 +1,7 @@
 from django.urls import path
-
-from . import views
+from .views import QueryDetail
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    # Other paths...
+    path('query', QueryDetail.as_view()),
 ]
