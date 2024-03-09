@@ -51,6 +51,9 @@ function RootComponent() {
 						</Link>
 					</>
 				)}
+				<Link to="/testing" activeProps={{ className: "font-bold" }}>
+					testing
+				</Link>
 			</div>
 			<hr />
 			<Outlet />
