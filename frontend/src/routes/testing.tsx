@@ -40,30 +40,40 @@ function GraphTestComponent() {
 	});
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
+		// Construct the URL with specific query parameters
+		const queryParams = new URLSearchParams({
+			limit: data.limit.toString(),
+			offset: data.offset.toString(),
+			search: data.search,
+		}).toString();
+
 		try {
-			const response = await fetch("http://127.0.0.1:8000/api/query", {
-				method: "POST", // Assuming your backend expects a POST request
+			const url = `http://127.0.0.1:8000/api/query?${queryParams}`;
+			const response = await fetch(url, {
+				method: "GET", // Use GET for query parameters
 				headers: {
-					"Content-Type": "application/json",
-					// Include authentication token if required:
+					// If your API requires authentication headers or others, set them here
 					// 'Authorization': `Bearer ${auth.token}`,
 				},
-				body: JSON.stringify(data),
 			});
 
 			if (!response.ok) {
-				throw new Error(`Error: ${response.status}`);
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 
 			const result = await response.json();
+			console.log(result);
 			toast({
-				title: "Success!",
+				title: "Success! You submitted:",
 				description: (
-					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-						<code className="text-white">
-							{JSON.stringify(result, null, 2)}
-						</code>
-					</pre>
+					<div>
+						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+							<code className="text-white">
+								{JSON.stringify(data, null, 2)}
+							</code>
+						</pre>
+						<p>Check the console for the data</p>
+					</div>
 				),
 			});
 		} catch (error) {
