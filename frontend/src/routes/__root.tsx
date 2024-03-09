@@ -19,7 +19,7 @@ function RootComponent() {
 	const auth = useAuth();
 	return (
 		<>
-			<div className="p-2 flex gap-2 text-lg">
+			<div className="p-2 flex gap-2 text-lg text-center justify-center">
 				<Link
 					to="/"
 					activeProps={{ className: "font-bold" }}
