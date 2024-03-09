@@ -24,8 +24,8 @@ export const Route = createFileRoute("/testing")({
 });
 
 const FormSchema = z.object({
-	limit: z.number(),
-	offset: z.number(),
+	limit: z.string(),
+	offset: z.string(),
 	search: z.string(),
 });
 
@@ -33,8 +33,8 @@ function GraphTestComponent() {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			limit: 10,
-			offset: 0,
+			limit: "10",
+			offset: "0",
 			search: "",
 		},
 	});
@@ -42,8 +42,8 @@ function GraphTestComponent() {
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
 		// Construct the URL with specific query parameters
 		const queryParams = new URLSearchParams({
-			limit: data.limit.toString(),
-			offset: data.offset.toString(),
+			limit: data.limit,
+			offset: data.offset,
 			search: data.search,
 		}).toString();
 
