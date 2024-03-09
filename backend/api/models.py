@@ -21,8 +21,3 @@ class Query(models.Model):
     sort = models.JSONField(null=True, blank=True, default=None)
     include_total = models.BooleanField(default=False)
     records_format = models.CharField(choices=[('objects', 'objects'), ('lists', 'lists'), ('csv', 'csv'), ('tsv', 'tsv')], default='csv', max_length=7)
-
-    
-    
-    def __str__(self):
-        return self.reference_number
