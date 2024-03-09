@@ -3,6 +3,8 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./index.css";
 import { AuthProvider, useAuth } from "./auth";
 
+import { Toaster } from "./components/ui/toaster";
+
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
@@ -32,6 +34,7 @@ function App() {
 	return (
 		<AuthProvider>
 			<InnerApp />
+			<Toaster />
 		</AuthProvider>
 	);
 }
