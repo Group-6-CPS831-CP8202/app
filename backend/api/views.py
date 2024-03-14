@@ -75,7 +75,16 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "success"}, status=status.HTTP_201_CREATED)
+            response = Response({"message": "success"}, status=status.HTTP_201_CREATED)
+            # Set the HTTP-only cookie
+            response.set_cookie(
+                key='auth_token',
+                value=token.key,
+                httponly=True,
+                samesite='Lax',
+                secure=False,  # Use False if you are not using HTTPS in development
+            )
+            return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -100,4 +109,8 @@ class LoginView(APIView):
         else:
             return Response({"error": "invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         
-
+class LogoutView(APIView):
+    def post(self, request):
+        response = Response({"message": "success"}, status=status.HTTP_200_OK)
+        response.delete_cookie('auth_token')
+        return response
