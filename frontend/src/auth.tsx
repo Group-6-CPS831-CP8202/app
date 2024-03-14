@@ -10,7 +10,7 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = React.useState<string | null>(null);
-	const isAuthenticated = !!user;
+	const isAuthenticated = !!user; // converts user to boolean
 	return (
 		<AuthContext.Provider value={{ isAuthenticated, user, setUser }}>
 			{children}
