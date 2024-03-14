@@ -9,6 +9,7 @@ from .serializers import QuerySerializer, UserSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from django.conf import settings
 
 class QueryDetail(APIView):
     permission_classes = [AllowAny]
@@ -74,7 +75,8 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            token, _ = Token.objects.get_or_create(user=user)
             response = Response({"message": "success"}, status=status.HTTP_201_CREATED)
             # Set the HTTP-only cookie
             response.set_cookie(
@@ -82,7 +84,7 @@ class RegisterView(APIView):
                 value=token.key,
                 httponly=True,
                 samesite='Lax',
-                secure=False,  # Use False if you are not using HTTPS in development
+                secure=not settings.DEBUG,  # False if DEBUG is True, True otherwise
             )
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -103,7 +105,7 @@ class LoginView(APIView):
                 value=token.key,
                 httponly=True,
                 samesite='Lax',
-                secure=False,  # Use False if you are not using HTTPS in development
+                secure=not settings.DEBUG,  # False if DEBUG is True, True otherwise
             )
             return response
         else:
