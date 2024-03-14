@@ -5,8 +5,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Query
-from .serializers import QuerySerializer
+from .serializers import QuerySerializer, UserSerializer
 from rest_framework.permissions import AllowAny
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
 
 class QueryDetail(APIView):
     permission_classes = [AllowAny]
@@ -64,3 +66,38 @@ class QueryDetail(APIView):
             return Response(response.json(), status=status.HTTP_200_OK)
         else:
             return Response(response.text, status=response.status_code)
+
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "success"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
+            response = Response({"message": "success"}, status=status.HTTP_200_OK)
+            # Set the HTTP-only cookie
+            response.set_cookie(
+                key='auth_token',
+                value=token.key,
+                httponly=True,
+                samesite='Lax',
+                secure=False,  # Use False if you are not using HTTPS in development
+            )
+            return response
+        else:
+            return Response({"error": "invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
