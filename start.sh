@@ -6,7 +6,7 @@ cd frontend || exit
 npm run dev &
 
 # Start backend
-cd backend || exit
+cd ../backend || exit
 source venv/bin/activate
 echo "Making migrations..."
 python manage.py makemigrations
