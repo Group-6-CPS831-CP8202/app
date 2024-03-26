@@ -45,3 +45,9 @@ While the install scripts should install all the correct dependencies there are 
 We're using [Biomejs](https://biomejs.dev/) for automatic code formatting and linting. Opening the Repo in VSCode should prompt you to install the recommended extensions.
 
 You may get an error saying that biome isn't installed, just click install/download.
+
+## Common Issues
+
+> All of the requests on the frontend are failing
+
+Double check that the local frontend server is running on either `127.0.0.0:5173` or `localhost:5173`. The CORS headers are set to only receive requests from specific origins for security reasons.
