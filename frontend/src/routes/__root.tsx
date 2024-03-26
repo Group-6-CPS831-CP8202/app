@@ -6,6 +6,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { useAuth, type AuthContext } from "../auth";
+import Footer from "@/components/ui/footer";
 
 interface MyRouterContext {
 	auth: AuthContext;
@@ -56,8 +57,11 @@ function RootComponent() {
 				</Link>
 			</div>
 			<hr />
-			<Outlet />
+			<div style={{ minHeight: "70vh" }}>
+				<Outlet />
+			</div>
 			<TanStackRouterDevtools position="bottom-left" initialIsOpen={false} />
+			<Footer />
 		</>
 	);
 }
