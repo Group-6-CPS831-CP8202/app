@@ -1,15 +1,14 @@
 const Footer: React.FC = () => {
 	return (
-		<footer className="px-5 py-4 mt-20 text-center border-t-2">
+		<footer className="px-5 py-4 mt-20 mb-10 text-center border-t-2">
 			<div className="flex flex-col sm:flex-row justify-center items-center gap-6">
 				<div className="flex flex-col items-center w-full sm:max-w-[50%] md:max-w-[30%]">
 					<img
-						src="../../../public/Logo-3000.png" // Ensure this path is correct based on your project setup
+						src="../../../public/Logo-3000.png"
 						alt="logo"
-						className="w-full max-h-24 md:max-h-32 object-contain" // Control the image size with max-height
+						className="w-full max-h-24 md:max-h-32 object-contain"
 					/>
-					<p className="font-bold text-xl pt-4">A CPS831/CP8202 Project</p>{" "}
-					{/* Moved under the logo */}
+					<p className="font-bold text-xl pt-4">A CPS831/CP8202 Project</p>
 				</div>
 				<div className="flex justify-center gap-2">
 					<div className="flex justify-center gap-1 flex-col">

@@ -57,7 +57,7 @@ function RootComponent() {
 				</Link>
 			</div>
 			<hr />
-			<div style={{ minHeight: "70vh" }}>
+			<div style={{ minHeight: "80vh" }}>
 				<Outlet />
 			</div>
 			<TanStackRouterDevtools position="bottom-left" initialIsOpen={false} />
