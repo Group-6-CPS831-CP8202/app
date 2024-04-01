@@ -1,46 +1,112 @@
 import * as React from "react";
-import { flushSync } from "react-dom";
-import {
-	createFileRoute,
-	getRouteApi,
-	useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, getRouteApi, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { useAuth } from "../auth";
+import { useAuth } from "../auth"; // Ensure this path matches your project structure
 
 export const Route = createFileRoute("/register")({
-	validateSearch: z.object({
-		redirect: z.string().catch("/"),
-	}),
-	component: RegisterComponent,
+  validateSearch: z.object({
+    redirect: z.string().catch("/"),
+  }),
+  component: RegisterComponent,
 });
 
 const routeApi = getRouteApi("/register");
 
 function RegisterComponent() {
-	const auth = useAuth();
-	const navigate = useNavigate();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
-	const [isSubmitting, setIsSubmitting] = React.useState(false);
-	const [name, setName] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [error, setError] = React.useState("");
 
-	const search = routeApi.useSearch();
+  const search = routeApi.useSearch();
 
-	const handleRegistration = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
+  const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-		flushSync(() => {
-			auth.setUser(name);
-		});
+    // Client-side validation
+    if (!username || !password || !confirmPassword) {
+      setError("All fields are required");
+      setIsSubmitting(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setIsSubmitting(false);
+      return;
+    }
 
-		navigate({ to: search.redirect });
-	};
+    try {
+      // Here we use the register function provided by the useAuth hook
+      await auth.register(username, password);
+      // Redirect to the specified page or default to "/"
+      navigate({ to: search.redirect });
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setError("Registration failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-	return (
-		<div className="p-2">
-			<h3>Register page</h3>
+  return (
+	<div className="p-2">
+	  {error && <p className="text-red-500">{error}</p>}
+	  <form className="mt-4" onSubmit={handleRegistration}>
+		<div className="flex flex-col gap-4"> {/* Added gap-4 to add space between elements */}
+		  <div className="flex flex-col">
+			<label htmlFor="username-input" className="text-sm font-medium">
+			  Username
+			</label>
+			<input
+			  id="username-input"
+			  type="text"
+			  value={username}
+			  onChange={(e) => setUsername(e.target.value)}
+			  className="border border-gray-300 rounded-md p-2"
+			  required
+			/>
+		  </div>
+		  <div className="flex flex-col">
+			<label htmlFor="password-input" className="text-sm font-medium">
+			  Password
+			</label>
+			<input
+			  id="password-input"
+			  type="password"
+			  value={password}
+			  onChange={(e) => setPassword(e.target.value)}
+			  className="border border-gray-300 rounded-md p-2"
+			  required
+			/>
+		  </div>
+		  <div className="flex flex-col">
+			<label htmlFor="confirm-password-input" className="text-sm font-medium">
+			  Confirm Password
+			</label>
+			<input
+			  id="confirm-password-input"
+			  type="password"
+			  value={confirmPassword}
+			  onChange={(e) => setConfirmPassword(e.target.value)}
+			  className="border border-gray-300 rounded-md p-2"
+			  required
+			/>
+		  </div>
 		</div>
-	);
+		<button
+		  type="submit"
+		  className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-md mt-4"
+		  disabled={isSubmitting}
+		>
+		  {isSubmitting ? "Loading..." : "Register"}
+		</button>
+	  </form>
+	</div>
+  );
 }
