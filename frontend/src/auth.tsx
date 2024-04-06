@@ -15,6 +15,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const isAuthenticated = !!user; // converts user to boolean
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
+	React.useEffect(() => {
+		// check for existing login state on app initialization
+		try {
+			const storedUser = localStorage.getItem("user");
+			if (storedUser) {
+				setUser(storedUser);
+			}
+		} catch (error) {
+			console.error("Failed to retrieve user from local storage:", error);
+		}
+	}, []);
+
 	// login function
 	const login = async (username: string, password: string) => {
 		const response = await fetch(`${BASE_URL}/login`, {
@@ -28,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		if (response.ok) {
 			setUser(username);
+			localStorage.setItem("user", username);
 		} else {
 			const data = await response.json();
 			throw new Error(data.message || "Failed to login");
@@ -43,6 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		if (response.ok) {
 			setUser(null);
+			localStorage.removeItem("user");
 		} else {
 			throw new Error("Failed to logout");
 		}
