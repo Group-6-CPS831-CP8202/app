@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
 			<div className="flex flex-col sm:flex-row justify-center items-center gap-6">
 				<div className="flex flex-col items-center w-full sm:max-w-[50%] md:max-w-[30%]">
 					<img
-						src="../../../public/Logo-3000.png"
+						src="/Logo-3000.png"
 						alt="logo"
 						className="w-full max-h-24 md:max-h-32 object-contain"
 					/>
