@@ -4,7 +4,6 @@ import {
 	createRootRouteWithContext,
 	useNavigate,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContext } from "../auth";
 import Footer from "@/components/ui/footer";
 import { Button } from "@/components/ui/button";
