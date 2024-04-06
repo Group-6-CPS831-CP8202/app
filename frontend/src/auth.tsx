@@ -13,7 +13,7 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = React.useState<string | null>(null);
 	const isAuthenticated = !!user; // converts user to boolean
-	const BASE_URL = import.meta.env.VITE_BASE_URL;
+	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 	// login function
 	const login = async (username: string, password: string) => {
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				"Content-Type": "application/json",
 			},
 			credentials: "include",
-			body: JSON.stringify({ username, password }),
+			body: JSON.stringify({ username: username, password: password }),
 		});
 
 		if (response.ok) {
