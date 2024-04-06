@@ -9,7 +9,7 @@ cd ..
 
 # Setup backend virtual environment and install dependencies
 echo "Setting up backend..."
-cd ../backend || exit
+cd backend || exit
 python3 -m venv venv  # This creates a venv directory inside backend
 source venv/bin/activate
 pip install -r requirements.txt
