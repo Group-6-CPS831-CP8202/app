@@ -1,13 +1,8 @@
 import * as React from "react";
-import { flushSync } from "react-dom";
-import {
-	createFileRoute,
-	getRouteApi,
-	useNavigate,
-} from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-
 import { useAuth } from "../auth"; // Ensure this path matches your project structure
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/login")({
 	validateSearch: z.object({
@@ -25,23 +20,21 @@ function LoginComponent() {
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const [username, setUsername] = React.useState("");
 	const [password, setPassword] = React.useState("");
+	const [loginError, setLoginError] = React.useState("");
 
 	const search = routeApi.useSearch();
 
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsSubmitting(true);
+		setLoginError(""); // reset login error message on a new submission
 
 		try {
-			// Here we use the login function provided by the useAuth hook
 			await auth.login(username, password);
-
-			// Using flushSync here is not necessary unless you have specific reasons
-			// related to concurrent React features.
 			navigate({ to: search.redirect || "/" });
 		} catch (error) {
-			console.error("Login failed:", error);
-			// Handle error (e.g., show an error message)
+			// set the error message to be displayed to the user
+			setLoginError("Wrong username or password");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -49,13 +42,12 @@ function LoginComponent() {
 
 	return (
 		<div className="p-2 h-screen flex justify-center items-center bg-white">
-			{" "}
-			{/* Adjusted to center content */}
 			<div className="w-full max-w-md py-8">
-				{" "}
-				{/* Added vertical padding */}
 				<form className="mt-4" onSubmit={handleLogin}>
 					<fieldset disabled={isSubmitting} className="flex flex-col gap-2">
+						{loginError && (
+							<div className="text-red-500 text-center">{loginError}</div>
+						)}
 						<div className="flex gap-2 items-center">
 							<label htmlFor="username-input" className="text-sm font-medium">
 								Username
