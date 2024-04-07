@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import type { z } from "zod";
+
+import { QuerySchema } from "@/lib/query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,39 +20,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
-import { useAuth } from "../auth";
-
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
 });
 
-const FormSchema = z.object({
-	limit: z.string(),
-	offset: z.string(),
-	search: z.string(),
-});
-
 function HomeComponent() {
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
-		defaultValues: {
-			limit: "10",
-			offset: "0",
-			search: "",
-		},
+	const form = useForm<z.infer<typeof QuerySchema>>({
+		resolver: zodResolver(QuerySchema),
 	});
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
-		// Construct the URL with specific query parameters
-		const queryParams = new URLSearchParams({
-			limit: data.limit,
-			offset: data.offset,
-			search: data.search,
-		}).toString();
+	async function onSubmit(data: z.infer<typeof QuerySchema>) {
+		// initialize URLSearchParams
+		const queryParams = new URLSearchParams();
+
+		// iterate over each key in the data object
+		// biome-ignore lint/complexity/noForEach: <explanation>
+		Object.keys(data).forEach((key) => {
+			const value = data[key];
+
+			// check if the value is undefined or null
+			if (value !== undefined && value !== null) {
+				// for non-undefined, non-null values, add them to queryParams
+				queryParams.set(key, String(value));
+			} // omits all others
+		});
+
+		// construct the full URL with query parameters
+		const url = `${BASE_URL}/query?${queryParams.toString()}`;
 
 		try {
-			const url = `${BASE_URL}/query?${queryParams}`;
 			const response = await fetch(url, {
 				method: "GET",
 				credentials: "include",
@@ -61,6 +61,8 @@ function HomeComponent() {
 
 			const result = await response.json();
 			console.log(result);
+
+			// success toast with data display
 			toast({
 				title: "Success! You submitted:",
 				description: (
@@ -75,6 +77,7 @@ function HomeComponent() {
 				),
 			});
 		} catch (error) {
+			// error handling with toast
 			toast({
 				title: "Error submitting form",
 				description: error.message,
@@ -82,7 +85,6 @@ function HomeComponent() {
 		}
 	}
 
-	const auth = useAuth();
 	return (
 		<div className="p-2">
 			<h2 className="text-2xl font-bold">graph test page</h2>
@@ -97,11 +99,11 @@ function HomeComponent() {
 						name="limit"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>limit</FormLabel>
+								<FormLabel>Results Limit</FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
-								<FormDescription>row limit</FormDescription>
+								<FormDescription>Default: 10</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -111,11 +113,11 @@ function HomeComponent() {
 						name="offset"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>offset</FormLabel>
+								<FormLabel>Data Offset</FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
-								<FormDescription>row offset count</FormDescription>
+								<FormDescription>Default: 0</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -125,11 +127,11 @@ function HomeComponent() {
 						name="search"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>search query</FormLabel>
+								<FormLabel>Search Query</FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
-								<FormDescription>filter by search</FormDescription>
+								<FormDescription>Filter by specific terms</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
