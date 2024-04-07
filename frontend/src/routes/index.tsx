@@ -147,7 +147,12 @@ function HomeComponent() {
 			</Form>
 			<br />
 			<h2 className="text-xl font-bold mt-10">Graphs</h2>
-			{dataSet ? <TestChart data={queryData} /> : <p>No data to display</p>}
+			{/*  
+			replaced graphs not implemented yet with: <TestChart data={queryData}
+
+			once the chart is implemented
+			/> */}
+			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
 		</div>
 	);
 }
