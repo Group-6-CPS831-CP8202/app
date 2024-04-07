@@ -73,6 +73,14 @@ class QueryDetail(APIView):
             return Response(response.json(), status=status.HTTP_200_OK)
         else:
             return Response(response.text, status=response.status_code)
+        
+
+class UserQueries(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        queries = Query.objects.filter(user=request.user)
+        serializer = QuerySerializer(queries, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RegisterView(APIView):
