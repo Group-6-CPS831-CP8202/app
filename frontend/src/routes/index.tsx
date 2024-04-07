@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 import type { z } from "zod";
 
@@ -17,8 +17,11 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import React from "react";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
@@ -29,10 +32,12 @@ function HomeComponent() {
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
 	});
+	const [loading, setLoading] = React.useState(false);
 
 	async function onSubmit(data: z.infer<typeof QuerySchema>) {
 		// initialize URLSearchParams
 		const queryParams = new URLSearchParams();
+		setLoading(true);
 
 		// iterate over each key in the data object
 		// biome-ignore lint/complexity/noForEach: <explanation>
@@ -83,6 +88,7 @@ function HomeComponent() {
 				description: error.message,
 			});
 		}
+		setLoading(false);
 	}
 
 	return (
@@ -136,7 +142,16 @@ function HomeComponent() {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit">Submit</Button>
+					{loading ? (
+						<Button className={"min-w-[130px]"} disabled>
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+							Loading...
+						</Button>
+					) : (
+						<Button className={"min-w-[130px]"} type="submit">
+							Submit
+						</Button>
+					)}
 				</form>
 			</Form>
 			<br />
