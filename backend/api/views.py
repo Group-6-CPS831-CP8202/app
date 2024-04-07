@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+import csv, os
 
 
 class QueryDetail(APIView):
@@ -61,45 +62,39 @@ class QueryDetail(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare fields and sort for the external API request
-
-        # Remove None values from query_data, and the custom data
-        query_data.pop('user', None)
-        query_data.pop('name', None)
-        query_data = {k: v for k, v in query_data.items() if v is not None or k in ['filters', 'search', 'fields', 'sort']}
-
-        # Make the external API request
-        external_api_url = 'https://open.canada.ca/data/api/action/datastore_search'
-
-        total_limit = int(request.query_params.get('limit', 10))
+        csv_file_path = 'api/data/contracts.csv'
+        total_limit = int(request.query_params.get('limit', '100'))  # Total number of records to return
         valid_records = []
-        
-        while len(valid_records) < total_limit:
-            print(len(valid_records))
-            response = requests.get(external_api_url, params=query_data)
-            if response.status_code != 200:
-                # If the API request fails, return the error
-                return Response(response.text, status=response.status_code)
-            
-            data = response.json().get('result', {})
-            records = data.get('records', [])
-            for record in records:
-                if record.get('contract_value') is not None:
-                    valid_records.append(record)
-                if len(valid_records) == total_limit:
-                    # If we have enough valid records, break out of the loop
-                    break
 
-            if len(records) < query_data['limit'] or len(valid_records) == total_limit:
-                # If we received fewer records than requested, assume we've reached the end of the dataset
-                break
+        try:
+            with open(csv_file_path, mode='r', encoding='utf-8') as file:
+                # Create a CSV reader object
+                csv_reader = csv.DictReader(file)
+                records = list(csv_reader)  # Convert the reader object to a list for sorting
+                
+                # Convert contract_value to float for sorting, handling None or empty strings
+                for record in records:
+                    try:
+                        record['contract_value'] = float(record.get('contract_value', 0))
+                    except ValueError:
+                        record['contract_value'] = 0
 
-            query_data['offset'] += query_data['limit']  # Update the offset for the next batch
+                # Sort the records by contract_value in descending order
+                sorted_records = sorted(records, key=lambda x: x['contract_value'], reverse=True)
 
-        if len(valid_records) < total_limit:
-            # If not enough valid records were found, you can choose to return what you have or an error
-            return Response({"error": "Not enough records with non-null contract values found", "records": valid_records}, status=status.HTTP_200_OK)
+                # Filter out records with contract_value of 0 (which were initially None or empty)
+                # and limit the number of records according to total_limit
+                for record in sorted_records:
+                    if record['contract_value'] > 0:
+                        valid_records.append(record)
+                        if len(valid_records) == total_limit:
+                            break
+        except FileNotFoundError:
+            return Response({"error": "CSV file not found"}, status=404)
+        except Exception as e:
+            return Response({"error": "An error occurred while processing the CSV file", "details": str(e)}, status=500)
 
-        return Response({"records": valid_records}, status=status.HTTP_200_OK)
+        return JsonResponse({"records": valid_records}, safe=False, status=200)
         
 
 class UserQueries(APIView):
