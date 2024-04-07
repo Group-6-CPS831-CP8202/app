@@ -38,7 +38,7 @@ While the install scripts should install all the correct dependencies there are 
 #### Backend
 
 - After installing a new dependency, `cd` into the `backend/` directory and run `pip freeze > requirements.txt` to update the requirements
-  - Make sure you've activated your virtual environment first via `/backend/venv/bin/activate` (`activate.bat` on Windows)
+  - Make sure you've activated your virtual environment first via `source /backend/venv/bin/activate` (`/backend/venv/bin/activate.bat` on Windows)
 
 ### BiomesJS
 
