@@ -18,7 +18,7 @@ class QueryDetail(APIView):
     def get(self, request, format=None):
         # Initialize all parameters, setting explicit None defaults for fields without defaults in the model
         query_data = {
-            'limit': 1000, # number of records to fetch per request, not the total returned limit
+            'limit': int(request.query_params.get('limit', 10)), # number of records to fetch per request, not the total returned limit
             'offset': int(request.query_params.get('offset', '0')),
             'name': request.query_params.get('name', 'My Query'),
         }
@@ -36,7 +36,7 @@ class QueryDetail(APIView):
 
         # Prepare fields and sort for the external API request
         csv_file_path = 'api/data/contracts.csv'
-        total_limit = int(request.query_params.get('limit', '100'))  # Total number of records to return
+        total_limit = query_data['limit']
         valid_records = []
 
         try:
@@ -61,7 +61,6 @@ class QueryDetail(APIView):
 
                 # Apply offset and limit
                 offset = int(request.query_params.get('offset', '0'))
-                total_limit = int(request.query_params.get('limit', '100'))  # Total number of records to return
 
                 # Calculate the end index for slicing, ensuring it doesn't exceed the list length
                 end_index = offset + total_limit if (offset + total_limit <= len(sorted_and_filtered_records)) else len(sorted_and_filtered_records)
