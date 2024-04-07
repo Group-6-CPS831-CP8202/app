@@ -29,6 +29,13 @@ function RootComponent() {
 		}
 	};
 
+	function truncateName(name: string) {
+		if (name.length > 8) {
+			return `${name.slice(0, 8)}...`;
+		}
+		return name;
+	}
+
 	return (
 		<>
 			<div className="flex justify-between items-center p-2">
@@ -46,7 +53,7 @@ function RootComponent() {
 					{auth.isAuthenticated ? (
 						<>
 							<span className="flex items-center italic">
-								Welcome, {auth.user}
+								Welcome, {truncateName(auth.user || "User")}
 							</span>
 							<Button onClick={handleLogout}>Logout</Button>
 						</>
