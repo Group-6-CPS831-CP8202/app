@@ -30,6 +30,7 @@ const FormSchema = z.object({
 });
 
 function HomeComponent() {
+	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -48,13 +49,10 @@ function HomeComponent() {
 		}).toString();
 
 		try {
-			const url = `http://127.0.0.1:8000/api/query?${queryParams}`;
+			const url = `${BASE_URL}/query?${queryParams}`;
 			const response = await fetch(url, {
-				method: "GET", // Use GET for query parameters
-				headers: {
-					// If your API requires authentication headers or others, set them here
-					// 'Authorization': `Bearer ${auth.token}`,
-				},
+				method: "GET",
+				credentials: "include",
 			});
 
 			if (!response.ok) {

@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Query
 from .serializers import QuerySerializer, UserSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+
 
 class QueryDetail(APIView):
     permission_classes = [AllowAny]
@@ -29,6 +30,10 @@ class QueryDetail(APIView):
             'fields': None,  # Explicitly set to None if not provided
             'sort': None,  # Explicitly set to None if not provided
         }
+
+        if request.user.is_authenticated:
+            query_data['user'] = request.user.id
+        
 
         # Optional JSON fields handling
         if 'filters' in request.query_params and request.query_params['filters']:
@@ -56,7 +61,8 @@ class QueryDetail(APIView):
         # Prepare fields and sort for the external API request
         # This step might involve adjusting formats to match the external API expectations
 
-        # Remove None values from query_data, except those explicitly allowed
+        # Remove None values from query_data, except those explicitly allowed, and user
+        query_data.pop('user', None)
         query_data = {k: v for k, v in query_data.items() if v is not None or k in ['filters', 'search', 'fields', 'sort']}
 
         # Make the external API request
