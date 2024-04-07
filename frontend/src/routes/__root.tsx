@@ -32,7 +32,7 @@ function RootComponent() {
 	return (
 		<>
 			<div className="flex justify-between items-center p-2">
-				<div className="flex items-center gap-4	text-lg">
+				<div className="flex items-center md:gap-4	md:text-lg sm:text-md gap-1">
 					<Link to="/" activeProps={{ className: "font-bold" }}>
 						<img src="/Icon.png" alt="logo icon" className="max-h-16" />
 					</Link>
@@ -42,10 +42,12 @@ function RootComponent() {
 						</Link>
 					)}
 				</div>
-				<div className="flex gap-4 text-lg text-center">
+				<div className="flex md:gap-4 md:text-lg text-center sm:max-sm:text-sm gap-2">
 					{auth.isAuthenticated ? (
 						<>
-							<span className="flex items-center">Welcome, {auth.user}</span>
+							<span className="flex items-center italic">
+								Welcome, {auth.user}
+							</span>
 							<Button onClick={handleLogout}>Logout</Button>
 						</>
 					) : (
