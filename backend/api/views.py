@@ -21,16 +21,17 @@ class QueryDetail(APIView):
             'distinct': request.query_params.get('distinct', 'false').lower() in ['true', '1'],
             'plain': request.query_params.get('plain', 'true').lower() in ['true', '1'],
             'language': request.query_params.get('language', 'english'),
-            'limit': int(request.query_params.get('limit', '100')),
+            'limit': 1000, # number of records to fetch per request, not the total returned limit
             'offset': int(request.query_params.get('offset', '0')),
             'include_total': request.query_params.get('include_total', 'true').lower() in ['true', '1'],
             'records_format': request.query_params.get('records_format', 'objects'),
             'filters': None,  # Explicitly set to None if not provided
             'search': None,  # Explicitly set to None if not provided
             'fields': None,  # Explicitly set to None if not provided
-            'sort': None,  # Explicitly set to None if not provided
+            'sort': request.query_params.get('sort', 'contract_value desc'),
             'name': request.query_params.get('name', 'My Query'),
         }
+
 
         if request.user.is_authenticated:
             query_data['user'] = request.user.id
@@ -60,7 +61,6 @@ class QueryDetail(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare fields and sort for the external API request
-        # This step might involve adjusting formats to match the external API expectations
 
         # Remove None values from query_data, and the custom data
         query_data.pop('user', None)
@@ -69,12 +69,37 @@ class QueryDetail(APIView):
 
         # Make the external API request
         external_api_url = 'https://open.canada.ca/data/api/action/datastore_search'
-        response = requests.get(external_api_url, params=query_data)
 
-        if response.status_code == 200:
-            return Response(response.json(), status=status.HTTP_200_OK)
-        else:
-            return Response(response.text, status=response.status_code)
+        total_limit = int(request.query_params.get('limit', 10))
+        valid_records = []
+        
+        while len(valid_records) < total_limit:
+            print(len(valid_records))
+            response = requests.get(external_api_url, params=query_data)
+            if response.status_code != 200:
+                # If the API request fails, return the error
+                return Response(response.text, status=response.status_code)
+            
+            data = response.json().get('result', {})
+            records = data.get('records', [])
+            for record in records:
+                if record.get('contract_value') is not None:
+                    valid_records.append(record)
+                if len(valid_records) == total_limit:
+                    # If we have enough valid records, break out of the loop
+                    break
+
+            if len(records) < query_data['limit'] or len(valid_records) == total_limit:
+                # If we received fewer records than requested, assume we've reached the end of the dataset
+                break
+
+            query_data['offset'] += query_data['limit']  # Update the offset for the next batch
+
+        if len(valid_records) < total_limit:
+            # If not enough valid records were found, you can choose to return what you have or an error
+            return Response({"error": "Not enough records with non-null contract values found", "records": valid_records}, status=status.HTTP_200_OK)
+
+        return Response({"records": valid_records}, status=status.HTTP_200_OK)
         
 
 class UserQueries(APIView):
