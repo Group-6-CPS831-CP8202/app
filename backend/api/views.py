@@ -18,41 +18,14 @@ class QueryDetail(APIView):
     def get(self, request, format=None):
         # Initialize all parameters, setting explicit None defaults for fields without defaults in the model
         query_data = {
-            'resource_id': request.query_params.get('resource_id', 'fac950c0-00d5-4ec1-a4d3-9cbebf98a305'),
-            'distinct': request.query_params.get('distinct', 'false').lower() in ['true', '1'],
-            'plain': request.query_params.get('plain', 'true').lower() in ['true', '1'],
-            'language': request.query_params.get('language', 'english'),
             'limit': 1000, # number of records to fetch per request, not the total returned limit
             'offset': int(request.query_params.get('offset', '0')),
-            'include_total': request.query_params.get('include_total', 'true').lower() in ['true', '1'],
-            'records_format': request.query_params.get('records_format', 'objects'),
-            'filters': None,  # Explicitly set to None if not provided
-            'search': None,  # Explicitly set to None if not provided
-            'fields': None,  # Explicitly set to None if not provided
-            'sort': request.query_params.get('sort', 'contract_value desc'),
             'name': request.query_params.get('name', 'My Query'),
         }
 
 
         if request.user.is_authenticated:
             query_data['user'] = request.user.id
-        
-
-        # Optional JSON fields handling
-        if 'filters' in request.query_params and request.query_params['filters']:
-            try:
-                query_data['filters'] = json.loads(request.query_params['filters'])
-            except json.JSONDecodeError:
-                return JsonResponse({'error': 'Invalid JSON format for filters'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if 'search' in request.query_params:
-            query_data['q'] = request.query_params['search']  # 'search' parameter is known as 'q' in the API
-
-        if 'fields' in request.query_params:
-            query_data['fields'] = request.query_params['fields']
-
-        if 'sort' in request.query_params:
-            query_data['sort'] = request.query_params['sort']
 
         # Serialize data (to save/update Query object, if needed)
         serializer = QuerySerializer(data=query_data)
