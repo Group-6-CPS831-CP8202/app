@@ -92,9 +92,8 @@ function HomeComponent() {
 	}
 
 	return (
-		<div className="p-2">
-			<h2 className="text-2xl font-bold">graph test page</h2>
-			<h3 className="text-xl font-bold">form fields</h3>
+		<div className="p-2 m-10">
+			<h2 className="text-xl font-bold">Search Options</h2>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
@@ -128,20 +127,6 @@ function HomeComponent() {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="search"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Search Query</FormLabel>
-								<FormControl>
-									<Input {...field} />
-								</FormControl>
-								<FormDescription>Filter by specific terms</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 					{loading ? (
 						<Button className={"min-w-[130px]"} disabled>
 							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -155,7 +140,7 @@ function HomeComponent() {
 				</form>
 			</Form>
 			<br />
-			<h3 className="text-xl font-bold">test graphs</h3>
+			<h2 className="text-xl font-bold mt-10">Graphs</h2>
 		</div>
 	);
 }

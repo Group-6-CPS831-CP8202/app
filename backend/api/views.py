@@ -84,11 +84,19 @@ class QueryDetail(APIView):
 
                 # Filter out records with contract_value of 0 (which were initially None or empty)
                 # and limit the number of records according to total_limit
-                for record in sorted_records:
-                    if record['contract_value'] > 0:
-                        valid_records.append(record)
-                        if len(valid_records) == total_limit:
-                            break
+                sorted_and_filtered_records = [record for record in sorted_records if record['contract_value'] > 0]
+
+                # Apply offset and limit
+                offset = int(request.query_params.get('offset', '0'))
+                total_limit = int(request.query_params.get('limit', '100'))  # Total number of records to return
+
+                # Calculate the end index for slicing, ensuring it doesn't exceed the list length
+                end_index = offset + total_limit if (offset + total_limit <= len(sorted_and_filtered_records)) else len(sorted_and_filtered_records)
+
+                # Now apply the slicing to get the records you want to return
+                valid_records = sorted_and_filtered_records[offset:end_index]
+                
+
         except FileNotFoundError:
             return Response({"error": "CSV file not found"}, status=404)
         except Exception as e:
