@@ -7,6 +7,7 @@ class Query(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='query', default=None)
+    name = models.CharField(max_length=100, default='My Query')
 
     # fields
     resource_id = models.CharField(max_length=100, default='fac950c0-00d5-4ec1-a4d3-9cbebf98a305') # default contracts over 10k dataset

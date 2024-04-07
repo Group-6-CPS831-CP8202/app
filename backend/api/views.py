@@ -29,6 +29,7 @@ class QueryDetail(APIView):
             'search': None,  # Explicitly set to None if not provided
             'fields': None,  # Explicitly set to None if not provided
             'sort': None,  # Explicitly set to None if not provided
+            'name': request.query_params.get('name', 'My Query'),
         }
 
         if request.user.is_authenticated:
@@ -61,8 +62,9 @@ class QueryDetail(APIView):
         # Prepare fields and sort for the external API request
         # This step might involve adjusting formats to match the external API expectations
 
-        # Remove None values from query_data, except those explicitly allowed, and user
+        # Remove None values from query_data, and the custom data
         query_data.pop('user', None)
+        query_data.pop('name', None)
         query_data = {k: v for k, v in query_data.items() if v is not None or k in ['filters', 'search', 'fields', 'sort']}
 
         # Make the external API request
