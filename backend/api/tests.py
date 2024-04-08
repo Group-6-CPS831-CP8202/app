@@ -9,7 +9,7 @@ class QueryDetailTests(APITestCase):
         url = '/api/query' + '?limit=10&offset=0'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()['result']['resource_id'], 'fac950c0-00d5-4ec1-a4d3-9cbebf98a305')
+        self.assertEqual(len(response.json()['records']), 10)
 
 class RegisterEndPointTests(APITestCase):
     def test_register_endpoint(self):
