@@ -3,10 +3,9 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 
-import type { Query } from "../lib/query";
-import { QuerySchema } from "../lib/query";
-import type { z } from "zod";
+import  QueryBuilder from "@/components/query-builder";
 
+import type { Query } from "../lib/query";
 import { useAuth } from "../auth";
 import React, { useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
@@ -106,7 +105,7 @@ function DashboardComponent() {
         {isDrawerOpen ? 'Close' : 'History'}
       </button>
 
-      <div className={`fixed left-0 top-0 transform ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"} h-screen w-80 overflow-auto transition-transform duration-300 ease-in-out z-40 bg-white shadow-md p-4 md:translate-x-0 md:static md:w-auto`}>
+      <ScrollArea className={`fixed left-0 top-0 transform ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"} h-screen w-80 overflow-auto transition-transform duration-300 ease-in-out z-40 bg-white border-r-2 p-4 md:translate-x-0 md:static md:w-auto`}>
         <h2 className="font-bold text-lg pb-2">Query History</h2>
         {queryList.map((query, index) => (
           <React.Fragment key={query.id}>
@@ -118,7 +117,11 @@ function DashboardComponent() {
             {index < queryList.length - 1 && <Separator className="my-2" />}
           </React.Fragment>
         ))}
-      </div>
+      </ScrollArea>
+
+	  <div className="flex-1 p-4">
+		<QueryBuilder />
+		</div>
 
     </div>
   );
