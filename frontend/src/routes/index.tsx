@@ -70,6 +70,7 @@ function HomeComponent() {
 			}
 
 			const result = await response.json();
+			console.log(result.records);
 			setQueryData(result.records);
 			setDataSet(true);
 
@@ -109,7 +110,7 @@ function HomeComponent() {
 						control={form.control}
 						name="limit"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className="max-w-[200px]">
 								<FormLabel>Results Limit</FormLabel>
 								<FormControl>
 									<Input {...field} />
@@ -123,7 +124,7 @@ function HomeComponent() {
 						control={form.control}
 						name="offset"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className="max-w-[200px]">
 								<FormLabel>Data Offset</FormLabel>
 								<FormControl>
 									<Input {...field} />
