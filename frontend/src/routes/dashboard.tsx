@@ -113,7 +113,7 @@ function DashboardComponent() {
 
       <ScrollArea className={`fixed left-0 top-0 transform ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"} h-screen w-80 overflow-auto transition-transform duration-300 ease-in-out z-40 bg-white border-r-2 p-4 md:translate-x-0 md:static md:w-auto`}>
         <h2 className="font-bold text-lg pb-2">Query History</h2>
-        {queryList.map((query, index) => (
+        {queryList.slice().reverse().map((query, index) => (
           <React.Fragment key={query.id}>
             <QueryHistoryComponent
               timestamp={query.created_at}
