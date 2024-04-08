@@ -4,10 +4,10 @@ Team: Group 6
 
 Members:
 
-- Maisha Labiba
-- Brandon Ly
-- Ankit Sodhi
-- James Williamson
+- Brandon Ly (@brandonnly)
+- Ankit Sodhi (@a4sodhi)
+- Maisha Labiba (@Alina2614)
+- James Williamson (@Mechan0)
 
 ## Running Locally
 
@@ -18,13 +18,15 @@ Members:
 
 ### Install and Run
 
+A deeper explanation towards the installation and running of the project can be found in [INSTALL.md](INSTALL.md)
+
 1. Install the dependencies via the `./install.sh` (or `./install.bat` on Windows)
 
-   - Creates a python virtual enviroment in the `backend` directory and installs the requirements
+   - Creates a python virtual environment in the `backend` directory and installs the requirements
    - Installs all the required npm packages in the frontend
 
 2. Run the local servers via the `./start.sh` (or `./install.bat` on Windows)
-
+  
 ## Developing
 
 While the install scripts should install all the correct dependencies there are some edge cases.
