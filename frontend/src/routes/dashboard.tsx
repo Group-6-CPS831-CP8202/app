@@ -66,7 +66,7 @@ const QueryHistoryComponent: React.FC<QueryHistoryProps> = ({
 	const displayText = isToday ? `Today, ${timeString}` : date.toDateString();
 
 	return (
-		<div className="flex flex-row gap-2 p-1">
+		<div className="flex flex-row gap-2 p-1 min-w-[200px]">
 			<p className="text-sm">{displayText}</p>
 			<Badge className="text-xs">Limit: {limit}</Badge>
 			<Badge className="text-xs">Offset: {offset}</Badge>
@@ -107,6 +107,7 @@ function DashboardComponent() {
 	return (
 		<div className="relative min-h-screen md:flex">
 			<button
+				type="button"
 				className="md:hidden fixed bottom-24 z-50 p-2 bg-red-500 text-white rounded-e-md"
 				onClick={() => setIsDrawerOpen(!isDrawerOpen)}
 			>

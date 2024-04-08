@@ -18,7 +18,18 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import React, { PureComponent } from "react";
 import { Loader2 } from "lucide-react";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from 'recharts';
+import {
+	BarChart,
+	Bar,
+	Rectangle,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	Legend,
+	ResponsiveContainer,
+	Line,
+} from "recharts";
 import "./query-builder.css";
 
 /*
@@ -190,44 +201,60 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 				</form>
 			</Form>
 			<br />
-			
+
 			<h2 className="text-xl font-bold mt-10">Graphs</h2>
-			{
-			/*  
+			{/*  
 			replaced graphs not implemented yet with: <TestChart data={queryData}
 						
 			once the chart is implemented
-			/> */
-			}
-			<div className="barchart-container">
-				
-			<ResponsiveContainer width={'99%'} height={300}>
-			<BarChart
-          		width={500}
-          		height={500}
-          		data={queryData}
-          		margin={{
-            	top: 5,
-            	right: 30,
-            	left: 100,
-            	bottom: 5,
-          		}}
-        		>
-          		<CartesianGrid strokeDasharray="3 3" />
-          		<XAxis name="Contractor" dataKey="contractor" />
-          		<YAxis name="Value (CAD$)"/>
-          		<Tooltip />
-          		<Legend />
-          		<Bar name = "Contract Value" dataKey="contract_value" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-          		<Bar name = "Amendment Value" dataKey="amendment_value" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
-				
-  				<Legend verticalAlign="top" height={36}/>
-  				<Line name="Contract Value" type="monotone" dataKey="contract_value" stroke="#8884d8" />
-  				<Line name="Amendment Value" type="monotone" dataKey="amendment_value" stroke="#82ca9d" />
-        		</BarChart>
-      		</ResponsiveContainer>
+			/> */}
+			<div className="">
+				<ResponsiveContainer width={"99%"} height={300}>
+					<BarChart
+						width={500}
+						height={500}
+						data={queryData}
+						margin={{
+							top: 5,
+							right: 30,
+							left: 100,
+							bottom: 5,
+						}}
+					>
+						<CartesianGrid strokeDasharray="3 3" />
+						<XAxis name="Contractor" dataKey="contractor" />
+						<YAxis name="Value (CAD$)" />
+						<Tooltip />
+						<Legend />
+						<Bar
+							name="Contract Value"
+							dataKey="contract_value"
+							fill="#8884d8"
+							activeBar={<Rectangle fill="pink" stroke="blue" />}
+						/>
+						<Bar
+							name="Amendment Value"
+							dataKey="amendment_value"
+							fill="#82ca9d"
+							activeBar={<Rectangle fill="gold" stroke="purple" />}
+						/>
+
+						<Legend verticalAlign="top" height={36} />
+						<Line
+							name="Contract Value"
+							type="monotone"
+							dataKey="contract_value"
+							stroke="#8884d8"
+						/>
+						<Line
+							name="Amendment Value"
+							type="monotone"
+							dataKey="amendment_value"
+							stroke="#82ca9d"
+						/>
+					</BarChart>
+				</ResponsiveContainer>
 			</div>
-			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
 		</div>
 	);
 };

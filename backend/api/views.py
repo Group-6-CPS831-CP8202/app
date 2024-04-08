@@ -21,12 +21,13 @@ class QueryDetail(APIView):
             'limit': int(request.query_params.get('limit', 10)), # number of records to fetch per request, not the total returned limit
             'offset': int(request.query_params.get('offset', '0')),
             'name': request.query_params.get('name', 'My Query'),
+            
         }
         print("Running Query..")
 
 
-        if request.user.is_authenticated:
-            query_data['user'] = request.user.id
+        if (request.query_params.get('user')):
+            query_data['user'] = request.query_params.get('user')
 
         # Serialize data (to save/update Query object, if needed)
         serializer = QuerySerializer(data=query_data)
@@ -87,8 +88,12 @@ class FilteredContractsView(APIView):
         # and pass them directly to QueryDetail as params in the GET request.
         query_params = request.query_params.dict()
 
+        if request.user.is_authenticated:
+            query_params['user'] = request.user.id
+
         # Make a GET request to QueryDetail, including any query parameters it's expecting.
         response = requests.get(query_detail_url, params=query_params)
+        
 
         if response.status_code == 200:
             records = response.json().get('records', [])
