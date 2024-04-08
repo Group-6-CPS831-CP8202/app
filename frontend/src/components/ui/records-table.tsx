@@ -23,9 +23,9 @@ type RecordsTableProps = {
 export function RecordsTable({ dataSet }: RecordsTableProps) {
 	// Optional: Function to format numbers as currency
 	const formatCurrency = (value: number): string => {
-		return value.toLocaleString("en-US", {
+		return value.toLocaleString("en-CA", {
 			style: "currency",
-			currency: "USD",
+			currency: "CAD",
 		});
 	};
 
