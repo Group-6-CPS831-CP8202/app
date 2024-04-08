@@ -1,6 +1,6 @@
 const Footer: React.FC = () => {
 	return (
-		<footer className="px-5 py-4 mt-20 mb-10 text-center border-t-2">
+		<footer className="px-5 py-4 mb-10 text-center border-t-2">
 			<div className="flex flex-col sm:flex-row justify-center items-center gap-6">
 				<div className="flex flex-col items-center w-full sm:max-w-[50%] md:max-w-[30%]">
 					<img
