@@ -32,6 +32,8 @@ import {
 } from "recharts";
 import "./query-builder.css";
 
+import { RecordsTable } from "./ui/records-table";
+
 /*
 const Contract: Record<string:string> = {
     additional_comments_en: string,
@@ -255,6 +257,11 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 					</BarChart>
 				</ResponsiveContainer>
 			</div>
+
+			<br />
+
+			<h2 className="text-xl font-bold mt-10">Records</h2>
+			<RecordsTable dataSet={queryData} />
 		</div>
 	);
 };

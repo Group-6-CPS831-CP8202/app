@@ -105,10 +105,10 @@ function DashboardComponent() {
 	}, []);
 
 	return (
-		<div className="relative min-h-screen md:flex">
+		<div className="relative min-h-screen lg:flex">
 			<button
 				type="button"
-				className="md:hidden fixed bottom-24 z-50 p-2 bg-red-500 text-white rounded-e-md"
+				className="lg:hidden fixed bottom-24 z-50 p-2 bg-red-500 text-white rounded-e-md"
 				onClick={() => setIsDrawerOpen(!isDrawerOpen)}
 			>
 				{isDrawerOpen ? "Close" : "History"}
@@ -117,7 +117,7 @@ function DashboardComponent() {
 			<ScrollArea
 				className={`fixed left-0 top-0 transform ${
 					isDrawerOpen ? "translate-x-0" : "-translate-x-full"
-				} h-screen w-80 overflow-auto transition-transform duration-300 ease-in-out z-40 bg-white border-r-2 p-4 md:translate-x-0 md:static md:w-auto`}
+				} h-screen w-80 overflow-auto transition-transform duration-300 ease-in-out z-40 bg-white border-r-2 p-4 lg:translate-x-0 lg:static lg:w-auto`}
 			>
 				<h2 className="font-bold text-lg pb-2">Query History</h2>
 				{queryList
