@@ -78,8 +78,7 @@ function DashboardComponent() {
 	const [queryList, setQueryList] = React.useState<Query[]>([]);
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-	useEffect(() => {
-		const fetchData = async () => {
+	const fetchData = async () => {
 			try {
 				const response = await fetch(`${BASE_URL}/user/queries`, {
 					method: "GET",
@@ -93,8 +92,15 @@ function DashboardComponent() {
 			}
 		};
 
+	const handleQuerySubmit = async () => {
+		await fetchData();
+	}
+
+	useEffect(() => {
 		fetchData();
 	}, []);
+
+
 
 	 return (
     <div className="relative min-h-screen md:flex">
@@ -120,7 +126,7 @@ function DashboardComponent() {
       </ScrollArea>
 
 	  <div className="flex-1 p-4">
-		<QueryBuilder />
+		<QueryBuilder onQuerySubmit={handleQuerySubmit}/>
 		</div>
 
     </div>

@@ -21,7 +21,7 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 
 
-const QueryBuilder: React.FC = () => {
+const QueryBuilder: React.FC = ({onQuerySubmit}) => {
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 	const [queryData, setQueryData] = React.useState([]);
@@ -66,6 +66,7 @@ const QueryBuilder: React.FC = () => {
 			console.log(result.records);
 			setQueryData(result.records);
 			setDataSet(true);
+            onQuerySubmit();
 
 			// success toast with data display
 			toast({
