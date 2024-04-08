@@ -65,7 +65,9 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 			console.log(result.records);
 			setQueryData(result.records);
 			setDataSet(true);
-			onQuerySubmit();
+			if (onQuerySubmit) {
+				onQuerySubmit();
+			}
 
 			// success toast with data display
 			toast({
