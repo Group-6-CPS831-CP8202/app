@@ -4,8 +4,6 @@ import { set, useForm } from "react-hook-form";
 import type { z } from "zod";
 import { QuerySchema } from "@/lib/query";
 
-import { Table } from "@/components/ui/table";
-
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -20,8 +18,56 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import React, { PureComponent } from "react";
 import { Loader2 } from "lucide-react";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from 'recharts';
+import "./query-builder.css";
 
+/*
+const Contract: Record<string:string> = {
+    additional_comments_en: string,
+    additional_comments_fr: string,
+    agreement_type_code: number,
+	amendment_value:string,
+	article_6_exceptions:string,
+	award_criteria:string,
+	buyer_name:string,
+	comments_en:string,
+	comments_fr:string,
+	commodity_code:string,
+	commodity_type:string,
+	contract_date:string,
+	contract_period_start:string,
+	contract_value:string,
+	contracting_entity:string,
+	country_of_vendor:string,
+	delivery_date:string,
+	description_en:string,
+	description_fr:string,
+	economic_object_code:string,
+	former_public_servant:string,
+	indigenous_business:string,
+	indigenous_business_excluding_psib:string,
+	instrument_type:string,
+	intellectual_property:string,
+	land_claims:string,
+	limited_tendering_reason:string,
+	ministers_office:string,
+	number_of_bids:string,
+	original_value:string,
+	owner_org:string,
+	owner_org_title:string,
+	potential_commercial_exploitation:string,
+	procurement_id:string,
+	reporting_period:string,
+	socioeconomic_indicator:string,
+	solicitation_procedure:string,
+	standing_offer_number:string,
+	trade_agreement:string,
+	trade_agreement_exceptions:string,
+	vendor_name:string,
+	vendor_postal_code:string,
+	reference_number:string,
+}
+*/
 const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -144,27 +190,7 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 				</form>
 			</Form>
 			<br />
-			<ResponsiveContainer width="100%" height="100%">
-        	<BarChart
-          	width={500}
-          	height={300}
-          	data={queryData}
-          	margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          	}}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="buyer_name" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-          <Bar dataKey="original_value" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
-        </BarChart>
-      </ResponsiveContainer>
+			
 			<h2 className="text-xl font-bold mt-10">Graphs</h2>
 			{
 			/*  
@@ -173,10 +199,35 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 			once the chart is implemented
 			/> */
 			}
+			<div className="barchart-container">
+				
+			<ResponsiveContainer width={'99%'} height={300}>
+			<BarChart
+          		width={500}
+          		height={500}
+          		data={queryData}
+          		margin={{
+            	top: 5,
+            	right: 30,
+            	left: 100,
+            	bottom: 5,
+          		}}
+        		>
+          		<CartesianGrid strokeDasharray="3 3" />
+          		<XAxis name="Contractor" dataKey="contractor" />
+          		<YAxis name="Value (CAD$)"/>
+          		<Tooltip />
+          		<Legend />
+          		<Bar name = "Contract Value" dataKey="contract_value" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+          		<Bar name = "Amendment Value" dataKey="amendment_value" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+				
+  				<Legend verticalAlign="top" height={36}/>
+  				<Line name="Contract Value" type="monotone" dataKey="contract_value" stroke="#8884d8" />
+  				<Line name="Amendment Value" type="monotone" dataKey="amendment_value" stroke="#82ca9d" />
+        		</BarChart>
+      		</ResponsiveContainer>
+			</div>
 			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
-
-			<br />
-			<h2 className="text-xl font-bold mt-10">Records</h2>
 		</div>
 	);
 };
