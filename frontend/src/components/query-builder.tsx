@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { set, useForm } from "react-hook-form";
 
 import type { z } from "zod";
-
 import { QuerySchema } from "@/lib/query";
 
 import { Button } from "@/components/ui/button";
@@ -17,8 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import React from "react";
+import React, { PureComponent } from "react";
 import { Loader2 } from "lucide-react";
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
@@ -140,12 +140,35 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 				</form>
 			</Form>
 			<br />
+			<ResponsiveContainer width="100%" height="100%">
+        	<BarChart
+          	width={500}
+          	height={300}
+          	data={queryData}
+          	margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          	}}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="buyer_name" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+          <Bar dataKey="original_value" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+        </BarChart>
+      </ResponsiveContainer>
 			<h2 className="text-xl font-bold mt-10">Graphs</h2>
-			{/*  
+			{
+			/*  
 			replaced graphs not implemented yet with: <TestChart data={queryData}
-
+						
 			once the chart is implemented
-			/> */}
+			/> */
+			}
 			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
 		</div>
 	);
