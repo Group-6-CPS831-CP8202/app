@@ -22,6 +22,7 @@ class QueryDetail(APIView):
             'offset': int(request.query_params.get('offset', '0')),
             'name': request.query_params.get('name', 'My Query'),
         }
+        print("Running Query..")
 
 
         if request.user.is_authenticated:
@@ -75,6 +76,41 @@ class QueryDetail(APIView):
             return Response({"error": "An error occurred while processing the CSV file", "details": str(e)}, status=500)
 
         return JsonResponse({"records": valid_records}, safe=False, status=200)
+    
+class FilteredContractsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        query_detail_url = request.build_absolute_uri('/api/query')
+
+        # Convert query parameters received by FilteredContractsView to a dictionary
+        # and pass them directly to QueryDetail as params in the GET request.
+        query_params = request.query_params.dict()
+
+        # Make a GET request to QueryDetail, including any query parameters it's expecting.
+        response = requests.get(query_detail_url, params=query_params)
+
+        if response.status_code == 200:
+            records = response.json().get('records', [])
+            filtered_records = [{
+                "contractor": record["vendor_name"],
+                # Use a function to safely convert values to float
+                "contract_value": self.safe_float_convert(record.get("contract_value")),
+                "amendment_value": self.safe_float_convert(record.get("amendment_value")),
+            } for record in records if 'vendor_name' in record]
+
+            return Response(filtered_records)
+        else:
+            return Response({"error": "Failed to retrieve data from QueryDetail view."}, status=response.status_code)
+
+    def safe_float_convert(self, value):
+        """Safely converts a value to float. Defaults to 0.0 if conversion fails."""
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return 0.0
+
+
         
 
 class UserQueries(APIView):

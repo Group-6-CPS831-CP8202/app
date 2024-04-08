@@ -5,6 +5,8 @@ import type { z } from "zod";
 
 import { QuerySchema } from "@/lib/query";
 
+import { Table } from "@/components/ui/table";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -49,7 +51,7 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 		});
 
 		// construct the full URL with query parameters
-		const url = `${BASE_URL}/query?${queryParams.toString()}`;
+		const url = `${BASE_URL}/query/contracts?${queryParams.toString()}`;
 
 		try {
 			const response = await fetch(url, {
@@ -62,8 +64,8 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 			}
 
 			const result = await response.json();
-			console.log(result.records);
-			setQueryData(result.records);
+			console.log(result);
+			setQueryData(result);
 			setDataSet(true);
 			if (onQuerySubmit) {
 				onQuerySubmit();
@@ -149,6 +151,9 @@ const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 			once the chart is implemented
 			/> */}
 			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
+
+			<br />
+			<h2 className="text-xl font-bold mt-10">Records</h2>
 		</div>
 	);
 };
