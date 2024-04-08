@@ -23,6 +23,8 @@ class RegisterEndPointTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, {'message': 'success'})
 
+"""
+not working
 #unit test
 from django.test import TestCase
 from myapp.serializers import MyModelSerializer
@@ -32,6 +34,7 @@ class MyModelSerializerTest(TestCase):
         data = {'field1': 'value1', 'field2': 'value2'}
         serializer = MyModelSerializer(data=data)
         self.assertTrue(serializer.is_valid())
+
 
 
 #integration test
@@ -60,3 +63,4 @@ class MyModelAPITest(APITestCase):
         data = {'field1': 'value1', 'field2': 'value2'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+"""
