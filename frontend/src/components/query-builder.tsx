@@ -20,8 +20,7 @@ import { toast } from "@/components/ui/use-toast";
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-
-const QueryBuilder: React.FC = ({onQuerySubmit}) => {
+const QueryBuilder: React.FC = ({ onQuerySubmit }) => {
 	const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 	const [queryData, setQueryData] = React.useState([]);
@@ -66,7 +65,7 @@ const QueryBuilder: React.FC = ({onQuerySubmit}) => {
 			console.log(result.records);
 			setQueryData(result.records);
 			setDataSet(true);
-            onQuerySubmit();
+			onQuerySubmit();
 
 			// success toast with data display
 			toast({
@@ -150,6 +149,6 @@ const QueryBuilder: React.FC = ({onQuerySubmit}) => {
 			{dataSet ? <p>Graphs not implemented yet.</p> : <p>No data to display</p>}
 		</div>
 	);
-}
+};
 
 export default QueryBuilder;
